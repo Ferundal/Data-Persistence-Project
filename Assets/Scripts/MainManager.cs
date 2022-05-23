@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class MainManager : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class MainManager : MonoBehaviour
     public Rigidbody Ball;
 
     public Text ScoreText;
+    public Text BestScoreText;
     public GameObject GameOverText;
     
     private bool m_Started = false;
@@ -18,13 +20,18 @@ public class MainManager : MonoBehaviour
     
     private bool m_GameOver = false;
 
-    
+    private GameOptions gameOptions;
+
+    [SerializeField] private Button toMenuButton;
+
     // Start is called before the first frame update
     void Start()
     {
+        gameOptions = GameOptions.Instance();
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
-        
+        UpdateMaxScore();
+
         int[] pointCountArray = new [] {1,1,2,2,5,5};
         for (int i = 0; i < LineCount; ++i)
         {
@@ -51,6 +58,7 @@ public class MainManager : MonoBehaviour
 
                 Ball.transform.SetParent(null);
                 Ball.AddForce(forceDir * 2.0f, ForceMode.VelocityChange);
+                toMenuButton.gameObject.SetActive(false);
             }
         }
         else if (m_GameOver)
@@ -70,7 +78,25 @@ public class MainManager : MonoBehaviour
 
     public void GameOver()
     {
+        gameOptions.AddNewScore(gameOptions.currentNick, m_Points);
+        UpdateMaxScore();
         m_GameOver = true;
+
         GameOverText.SetActive(true);
+        toMenuButton.gameObject.SetActive(true);
+    }
+
+    private void UpdateMaxScore()
+    {
+        if (gameOptions.maxScore.score != 0)
+        {
+            BestScoreText.gameObject.SetActive(true);
+            BestScoreText.text = "Best Score : " + gameOptions.maxScore.nick + " : " + gameOptions.maxScore.score;
+        }
+    }
+
+    public void LoadMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 }
