@@ -9,13 +9,19 @@ using UnityEditor;
 
 public class MenuManager : MonoBehaviour
 {
-    [SerializeField] private GameOptions gameOptions;
+    private GameOptions gameOptions;
     [SerializeField] private TMP_InputField inputField;
     // Start is called before the first frame update
+
+    public void Start()
+    {
+        gameOptions = GameOptions.Instance();
+    }
 
     public void StartGame()
     {
         Debug.Log("Start Game");
+        Debug.Log(inputField.text);
         gameOptions.currentNick = inputField.text;
         SceneManager.LoadScene(1);
     }

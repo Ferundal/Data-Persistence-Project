@@ -28,6 +28,7 @@ public class MainManager : MonoBehaviour
     void Start()
     {
         gameOptions = GameOptions.Instance();
+
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         UpdateMaxScore();

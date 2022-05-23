@@ -29,22 +29,18 @@ public class GameOptions : MonoBehaviour
         LoadMaxScore();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     void LoadMaxScore()
     {
         string path = Application.persistentDataPath + "/" + scoreFileName;
+        maxScore = new MaxScore();
         if (File.Exists(path))
         {
+            Debug.Log("Loading file");
             string scoreInJsonString = File.ReadAllText(path);
             maxScore = JsonUtility.FromJson<MaxScore>(scoreInJsonString);
         } else
         {
-            maxScore = new MaxScore();
+            Debug.Log("NewFile");
         }
     }
 
@@ -57,11 +53,6 @@ public class GameOptions : MonoBehaviour
 
     public static GameOptions Instance()
     {
-        if (instance == null)
-        {
-            instance = new GameOptions();
-            instance.LoadMaxScore();
-        }
         return instance;
     }
 
@@ -69,8 +60,10 @@ public class GameOptions : MonoBehaviour
     {
         if (score > maxScore.score)
         {
+            Debug.Log(this.maxScore.nick + " " + this.maxScore.score);
             maxScore.nick = nick;
             maxScore.score = score;
+            Debug.Log(this.maxScore.nick + " " + this.maxScore.score);
             return true;
         }
         return false;
